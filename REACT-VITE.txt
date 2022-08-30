@@ -1,0 +1,11 @@
+yarn create vite vidasanadiet --template react-ts
+cd vidasanadiet
+yarn init --yes
+yarn add @material-ui/core
+yarn add @mui/material @emotion/react @emotion/styled
+yarn add @mui/material @mui/styled-engine-sc styled-components
+yarn add @fontsource/roboto
+yarn add @reduxjs/toolkit react-redux
+// EJECUTAR
+yarn run vite
+

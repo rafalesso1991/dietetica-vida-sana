@@ -1,0 +1,31 @@
+import { createSlice } from '@reduxjs/toolkit'
+
+export interface ProductState {
+    page: number,
+    products: string,
+    isLoading: boolean
+
+}
+const initialState: ProductState = {
+  page: 0,
+  products: "",
+  isLoading: false
+} as ProductState
+
+export const productSlice = createSlice({
+  name: 'product',
+  initialState,
+  reducers: {
+    loadProducts: (state, /*action*/) => {
+        state.isLoading = true;
+    },
+    setProduct: (state,action) => {
+      console.log(action);
+    }
+  },
+})
+
+// Action Creators Functions:
+export const { loadProducts, setProduct } = productSlice.actions
+
+export default productSlice.reducer

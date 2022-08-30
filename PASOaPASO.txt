@@ -1,0 +1,34 @@
+yarn init --yes
+---------------------------------------------------------------------------------------------------------------------------------
+package.json
+"description": "API-REST usando TypeScript y NodeJS. BBDD: MySQL",
+"main": "app.ts",
+"author": "Rafael Alesso",
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+tsc --init				--> crea un archivo d compilacion d typescript
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+tsconfig.json
+"sourceMap": true,		--> p/saber dnde hay un error o advertencia en una linea d codigo
+"outDir": "./dist",			--> p/indicar en dnde vamos a colocar los archivos convertidos
+"moduleResolution": "node",	--> p/indicar q pueda trabajar con modulos d node.js
+"baseUrl": "./src",			--> p/especificar el directorio base
+	"include": ["src"],		--> p/indicar dnde esta la carpeta con los archivos
+	"exclude": ["src"]		--> p/indicar q carpeta no kiero q typescipt no empiece a revisar
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+yarn add typescript  -D		--> compilador d typescript
+yarn add nodemon  -D		--> p/q c/vez q cambie los archivos, vuelva a ejecutar el script
+yarn add express
+yarn add @types/express -D
+yarn add morgan			--> middleware q permite ver x consola + info sobre las peticiones q van llegando
+yarn add @types/morgan -D
+yarn add mysql2
+yarn add types/mysql2 -D	--> SIN el "@"
+yarn add sequelize
+yarn add dotenv			--> variables d entorno
+yarn add @types/dotenv -D
+yarn add jsonwebtoken
+yarn add @types/jsonwebtoken -D
+yarn add bcryptjs			--> p/guardar la password cifrada (en vez d en mero texto plano)
+yarn add @types/bcryptjs -D
+yarn add @hapi/joi
+yarn add @types/hapi__joi -D
