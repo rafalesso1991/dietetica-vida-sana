@@ -42,43 +42,48 @@ function getUsers(req, res) {
 exports.getUsers = getUsers;
 ;
 const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    //get req body
-    //get user pass email
     const newUser = Object.assign({}, req.body);
-    //si no existe ya devolver 200
-    //si el usuario tiene menos de 4 characteres marcar fallo
-    //si la contraseña no tiene 8 caracteres marcar fallo
     // Validation
     const { error } = (0, joi_1.signupValidation)(newUser);
     if (error)
         return res.status(400).json(error.message);
+    // Connection
     const connection = yield (0, mysql_1.connect)();
-    // if(NO SE CONECTO) {
-    //     return res.status(500)
-    // }
-    const repeated_u = yield connection.query('SELECT username FROM users WHERE username = ?', [newUser.username]);
-    if (!(repeated_u[0].toString() == "")) {
-        return res.status(400).json({ error: 'El username ya está registrado' });
-    }
-    //si existe devolver error correspondiente
+    // if (connection) return res.status(500).json('Conexion a la BBDD exitosa');
     // Email Validation
     const repeated_e = yield connection.query('SELECT email FROM users WHERE email = ?', [newUser.email]);
     if (!(repeated_e[0].toString() == "")) {
         return res.status(400).json({ error: 'El email ya está registrado' });
     }
-    //enviar mail de verificacion (opcional)
-    //encrypt password
+    ;
+    // Send verification mail (pending...)
+    // Encrypt password
     const salt = yield bcryptjs_1.default.genSalt(10);
     newUser.password = yield bcryptjs_1.default.hash(newUser.password, salt);
-    //guardar valor en base de datos
+    // Saving a new User
     yield connection.query('INSERT INTO users SET ?', [newUser]);
-    res.json({
-        message: 'Usuario registrado con éxito'
-    });
-    return res.status(200);
+    res.json({ message: 'Usuario registrado con éxito' });
+    return res.status(200).json({ message: 'Usuario registrado con éxito' });
 });
 exports.signup = signup;
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const newUser = Object.assign({}, req.body);
+    // Validation
+    const { error } = (0, joi_1.signinValidation)(newUser);
+    if (error)
+        return res.status(400).json(error.message);
+    // Connection
+    const connection = yield (0, mysql_1.connect)();
+    // if (connection) return res.status(500).json('Conexion a la BBDD exitosa');
+    // Email Validation
+    const user = yield connection.query('SELECT email FROM users WHERE email = ?', [newUser.email]);
+    if (!(user[0].toString() == "")) {
+        return res.status(400).json({ error: 'El email ya está registrado' });
+    }
+    ;
+    // Create a Token
+    // const token: string = jwt.sign({ _id: user._id }, process.env['TOKEN_SECRET'] || '');
+    // res.header('auth-token', token).json(token);
     //get req body
     //check if user exists
     //check if passwords match

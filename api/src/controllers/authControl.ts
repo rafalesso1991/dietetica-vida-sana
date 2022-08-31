@@ -21,7 +21,6 @@ import { signupValidation, signinValidation } from '../utils/joi'
 //     return await bcrypt.compare(password, query.password);
 // };
 
-
 export async function getUsers(req: Request, res: Response): Promise<Response | void> {
     try {
         const connection = await connect();
@@ -33,52 +32,45 @@ export async function getUsers(req: Request, res: Response): Promise<Response | 
     };
 };
 
-
 export const signup = async (req: Request, res: Response) => {
-    //get req body
-    //get user pass email
     const newUser: IUser = {...req.body};
-
-    //si no existe ya devolver 200
-    //si el usuario tiene menos de 4 characteres marcar fallo
-    //si la contraseña no tiene 8 caracteres marcar fallo
     // Validation
     const { error } = signupValidation(newUser);
     if (error) return res.status(400).json(error.message);
-
+    // Connection
     const connection = await connect();
-    // if(NO SE CONECTO) {
-    //     return res.status(500)
-    // }
-
-    const repeated_u = await connection.query('SELECT username FROM users WHERE username = ?', [newUser.username]);
-    if (!(repeated_u[0].toString() == "" )){
-        return res.status(400).json({error: 'El username ya está registrado'});
-    }
-
-    //si existe devolver error correspondiente
+    // if (connection) return res.status(500).json('Conexion a la BBDD exitosa');
     // Email Validation
     const repeated_e = await connection.query('SELECT email FROM users WHERE email = ?', [newUser.email]);
     if (!(repeated_e[0].toString() == "")){
         return res.status(400).json({error: 'El email ya está registrado'});
-    }
-
-                                //enviar mail de verificacion (opcional)
-
-    //encrypt password
+    };
+    // Send verification mail (pending...)
+    // Encrypt password
     const salt = await bcrypt.genSalt(10);
     newUser.password = await bcrypt.hash(newUser.password, salt);
-
-    //guardar valor en base de datos
+    // Saving a new User
     await connection.query('INSERT INTO users SET ?', [newUser]);
-    res.json({
-        message: 'Usuario registrado con éxito'
-    });
-    
-    return res.status(200)
+    res.json({message: 'Usuario registrado con éxito'});
+    return res.status(200).json({message: 'Usuario registrado con éxito'});
 };
 
 export const login = async (req: Request, res: Response) => {
+    const newUser: IUser = {...req.body};
+    // Validation
+    const { error } = signinValidation(newUser);
+    if (error) return res.status(400).json(error.message);
+    // Connection
+    const connection = await connect();
+    // if (connection) return res.status(500).json('Conexion a la BBDD exitosa');
+    // Email Validation
+    const user = await connection.query('SELECT email FROM users WHERE email = ?', [newUser.email]);
+    if (!(user[0].toString() == "")){
+        return res.status(400).json({error: 'El email ya está registrado'});
+    };
+    // Create a Token
+    // const token: string = jwt.sign({ _id: user._id }, process.env['TOKEN_SECRET'] || '');
+    // res.header('auth-token', token).json(token);
     //get req body
     //check if user exists
     //check if passwords match
@@ -86,13 +78,11 @@ export const login = async (req: Request, res: Response) => {
         //return jwt
     
         //return error 400
-
 };
 
 export const profile = async (req: Request, res: Response) => {
     //get req body
     //check jwt
         //return user info
-
         //return auth error
 };
