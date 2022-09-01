@@ -2,6 +2,7 @@ import express from 'express';
 import morgan from 'morgan';
 
 // import Routes
+import Products from './routes/api.routes'
 import Users from './routes/auth.routes'
 
 // Server class
@@ -25,6 +26,7 @@ class Server {
     };
     // Routes
     private routes(): void {
+        this.app.use('/api', Products);
         this.app.use('/users', Users);
     };
     // Start

@@ -16,6 +16,7 @@ exports.Server = void 0;
 const express_1 = __importDefault(require("express"));
 const morgan_1 = __importDefault(require("morgan"));
 // import Routes
+const api_routes_1 = __importDefault(require("./routes/api.routes"));
 const auth_routes_1 = __importDefault(require("./routes/auth.routes"));
 // Server class
 class Server {
@@ -39,6 +40,7 @@ class Server {
     ;
     // Routes
     routes() {
+        this.app.use('/api', api_routes_1.default);
         this.app.use('/users', auth_routes_1.default);
     }
     ;
